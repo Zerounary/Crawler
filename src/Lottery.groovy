@@ -33,11 +33,11 @@ while (true){
               INSERT INTO lotteryhis(issue, lotteryCode, createdTime, open, openNumber, openTime)
               VALUES (${it.issue},${it.lotteryCode},${it.createdTime},${it.open},${it.openNumber},${it.openTime})
             """;
+						println new Date().toLocaleString()  + "\t${it.issue}期数据已插入,结果: ${it.openNumber}"
         }else{
             println new Date().toLocaleString()  + "\t${it.issue}期的数据已存在"
         }
     }
-    println new Date().toLocaleString()  + "\t插入${dataNum}条数据"
     dataNum = 1
     listUrl = "https://m.cpzx18.com/v1/lottery/openResult?lotteryCode=1412&dataNum=${dataNum}&"
     Thread.sleep(dataNum * 5 * 60 * 1000)
