@@ -18,6 +18,6 @@ static def stringToUnicode(String prefix, String str) {
 }
 
 static def saveStringToFile(String dirKey,String name, String contentString){
-    def defaultDir = [bigData:'D:/BigData/',javaCrawler:'D:/Programing software/eclipse_workspaces/works/WebCrawler']
+    def defaultDir = [bigData:'D:/BigData/',javaCrawler:'D:/Programing software/eclipse_workspaces/works/WebCrawler', desktop:'C:\\Users\\Zerounary\\Desktop']
     new File(defaultDir[dirKey], name + '.json') << contentString
 }
