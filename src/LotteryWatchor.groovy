@@ -15,10 +15,12 @@ import org.jsoup.Jsoup
 import com.alibaba.fastjson.JSONObject
 import java.util.Date
 
-def watch_level = 4
+def watch_level = 3
 def dataNum = 10
 def CHECK_TIME_WITH_SECONDS = 10
+def REPEAT_TIMES = 3
 def lotteryCodes = ['1412', '0101', '1407']
+def todoCodes = []
 def set = new HashSet()
 def doc, listUrl;
 String openNumber
@@ -59,6 +61,7 @@ while (true){
 																|___/    
 									
 											"""
+											todoCodes << lotteryCode
 									}else if(lotteryCode == '0101'){
 											println """
 														_    _ _    _ 
@@ -70,6 +73,7 @@ while (true){
 																					 
 									
 											"""
+											todoCodes << lotteryCode
 									}else if(lotteryCode == '1412'){
 											println """
 													 _____ 
@@ -80,6 +84,7 @@ while (true){
 													 |____/  
 									
 											"""
+											todoCodes << lotteryCode
 									}
 									for(i in 1..data.size()){
 											obj = data[i-1]
@@ -100,6 +105,13 @@ while (true){
 				};
 				isRetry = true;
     }
+		if(!todoCodes.isEmpty()){
+			for(i in 1..REPEAT_TIMES){
+				"say ${todoCodes.join(',')} 已出现数据".execute();
+				"say 重复".execute();
+			}
+			todoCodes.clear()
+		}
     Thread.sleep(((60 + CHECK_TIME_WITH_SECONDS) - (((long)(System.currentTimeMillis()/1000)) % 60)) * 1000)
 }
 
