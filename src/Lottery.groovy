@@ -28,7 +28,7 @@ while (true){
     sql =  Sql.newInstance(url, user, password, driver);
     for (lotteryCode in lotteryCodes){
         listUrl = "https://m.cpzx18.com/v1/lottery/openResult?lotteryCode=${lotteryCode}&dataNum=${dataNum}&"
-        doc = Jsoup.connect(listUrl).ignoreContentType(true).get();
+        doc = Jsoup.connect(listUrl).timeout(10000).ignoreContentType(true).get();
         data = JSONObject.parseObject(doc.text()).getJSONArray('data')
         println new Date().toLocaleString() + "\t${lotteryCode}\t获取${dataNum}条数据"
         for (it in data){
