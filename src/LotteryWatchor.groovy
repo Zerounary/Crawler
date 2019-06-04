@@ -15,7 +15,7 @@ import org.jsoup.Jsoup
 import com.alibaba.fastjson.JSONObject
 import java.util.Date
 
-def watch_level = 2
+def watch_level = 4
 def dataNum = 10
 def CHECK_TIME_WITH_SECONDS = 10
 def lotteryCodes = ['1412', '0101', '1407']
@@ -88,6 +88,6 @@ while (true){
 
         set.clear()
     }
-    Thread.sleep(((60 + CHECK_TIME_WITH_SECONDS) - (System.currentTimeMillis() % 60)) * 1000)
+    Thread.sleep(((60 + CHECK_TIME_WITH_SECONDS) - ((System.currentTimeMillis()/1000) % 60)) * 1000)
 }
 
