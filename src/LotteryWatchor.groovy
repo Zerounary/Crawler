@@ -88,6 +88,6 @@ while (true){
 
         set.clear()
     }
-    Thread.sleep(((60 + CHECK_TIME_WITH_SECONDS) - (((long)System.currentTimeMillis()/1000) % 60)) * 1000)
+    Thread.sleep(((60 + CHECK_TIME_WITH_SECONDS) - (((long)(System.currentTimeMillis()/1000)) % 60)) * 1000)
 }
 
