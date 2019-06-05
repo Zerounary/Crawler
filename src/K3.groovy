@@ -10,10 +10,9 @@ class K3 {
     private final POSITIVE = '大'
     private final NEGATIVE = '小'
 
-    private hisLotterys = []
+    private pastLotterys = []
     private hisBets = []
     private guessReuslt = [("${POSITIVE}".toString()):NEGATIVE, ("${NEGATIVE}".toString()):POSITIVE]
-    private set = new HashSet()
     private betResult = ""
     private totBetAmt = 0;
     private betAmt = 0;
@@ -21,14 +20,14 @@ class K3 {
     public K3(wacthPoint){
         this.WATCH_POINT = wacthPoint
     }
-    K3Result  nextStep(lastResult){
+    K3Result  nextStep(lastOpenResult){
         K3Result k3Result = new K3Result()
-        hisLotterys << lastResult
-        if(hisLotterys.size() > WATCH_POINT){
-            set.addAll(hisLotterys[-1..-WATCH_POINT])
-            if(set.size() == 1){
+        pastLotterys << lastOpenResult
+        if(pastLotterys.size() > WATCH_POINT){
+            def isSameOpenReusltEveryInWatch = pastLotterys[-1..-WATCH_POINT].every{it==pastLotterys[-1]}
+            if(isSameOpenReusltEveryInWatch){
                 if(hisBets.size() == 0){
-                    betResult = guessReuslt[hisLotterys[-1]]
+                    betResult = guessReuslt[pastLotterys[-1]]
                     betAmt = FIRST_BET_AMT
                 }else{
                     totBetAmt = hisBets.sum()
@@ -41,7 +40,6 @@ class K3 {
 //                println "下${betResult} ${betAmt}倍"
             }else{
                 hisBets.clear()
-                set.clear()
                 k3Result.isBet = false;
 //                println "不下注"
             }

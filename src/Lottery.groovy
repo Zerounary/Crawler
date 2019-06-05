@@ -4,11 +4,11 @@
 
 @GrabConfig(systemClassLoader=true)
 @Grapes(
-        [
-                @Grab(group='mysql', module='mysql-connector-java', version='5.1.39'),
-                @Grab(group='org.jsoup', module='jsoup', version='1.9.1'),
-                @Grab(group='com.alibaba', module='fastjson', version='1.2.58')
-        ]
+				[
+								@Grab(group='mysql', module='mysql-connector-java', version='5.1.39'),
+								@Grab(group='org.jsoup', module='jsoup', version='1.9.1'),
+								@Grab(group='com.alibaba', module='fastjson', version='1.2.58')
+				]
 )
 import groovy.sql.Sql
 import org.jsoup.Jsoup
@@ -24,38 +24,36 @@ def sql;
 def dataNum = 200
 def lotteryCodes = ['1412', '0101', '1407']
 def doc, listUrl;
-def isRetry = true;
 while (true){
-    sql =  Sql.newInstance(url, user, password, driver);
-    for (lotteryCode in lotteryCodes){
-        listUrl = "https://m.cpzx18.com/v1/lottery/openResult?lotteryCode=${lotteryCode}&dataNum=${dataNum}&"
-				while(isRetry){
-					try{
-						doc = Jsoup.connect(listUrl).timeout(10000000).ignoreContentType(true).get();
-						data = JSONObject.parseObject(doc.text()).getJSONArray('data')
-						println new Date().toLocaleString() + "\t${lotteryCode}\t获取${dataNum}条数据"
-						for (it in data){
-								if (sql.firstRow("SELECT COUNT(*) AS num FROM lotteryhis where issue =${it.issue} and lotteryCode=${lotteryCode}").num == 0){
-										sql.executeInsert"""
+	sql =  Sql.newInstance(url, user, password, driver);
+	for (lotteryCode in lotteryCodes){
+		listUrl = "https://m.cpzx18.com/v1/lottery/openResult?lotteryCode=${lotteryCode}&dataNum=${dataNum}&"
+		while(true){
+			try{
+				doc = Jsoup.connect(listUrl).timeout(10000000).ignoreContentType(true).get();
+				data = JSONObject.parseObject(doc.text()).getJSONArray('data')
+				println new Date().toLocaleString() + "\t${lotteryCode}\t获取${dataNum}条数据"
+				for (it in data){
+					if (sql.firstRow("SELECT COUNT(*) AS num FROM lotteryhis where issue =${it.issue} and lotteryCode=${lotteryCode}").num == 0){
+						sql.executeInsert"""
 									INSERT INTO lotteryhis(issue, lotteryCode, createdTime, open, openNumber, openTime)
 									VALUES (${it.issue},${it.lotteryCode},${it.createdTime},${it.open},${it.openNumber},${it.openTime})
 								""";
-										println new Date().toLocaleString()  + "\t${lotteryCode}\t${it.issue}期数据已插入,结果: ${it.openNumber}"
-								}else{
-										println new Date().toLocaleString()  + "\t${lotteryCode}\t${it.issue}期的数据已存在"
-								}
-						}
-						listUrl = "https://m.cpzx18.com/v1/lottery/openResult?lotteryCode=${lotteryCode}&dataNum=${dataNum}&"
-						isRetry = false;
-					}catch(Exception e){
-						println e.getMessage()
-						println 'retrying...'
-					}	
+						println new Date().toLocaleString()  + "\t${lotteryCode}\t${it.issue}期数据已插入,结果: ${it.openNumber}"
+					}else{
+						println new Date().toLocaleString()  + "\t${lotteryCode}\t${it.issue}期的数据已存在"
+					}
 				}
-				isRetry = true;
-    }
-    Thread.sleep(30 * 1000)
-    dataNum = 10
-    sql.close()
+				listUrl = "https://m.cpzx18.com/v1/lottery/openResult?lotteryCode=${lotteryCode}&dataNum=${dataNum}&"
+				break;
+			}catch(Exception e){
+				println e.getMessage()
+				println 'retrying...'
+			}
+		}
+	}
+	Thread.sleep(30 * 1000)
+	dataNum = 10
+	sql.close()
 }
 
