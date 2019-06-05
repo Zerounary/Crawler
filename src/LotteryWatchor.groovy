@@ -15,7 +15,7 @@ import org.jsoup.Jsoup
 import com.alibaba.fastjson.JSONObject
 import java.util.Date
 
-def LENGTH_OF_SAME_OPENRESULT = 1
+def LENGTH_OF_SAME_OPENRESULT = 6
 def NUM_OF_REQUEST_DATA = 10
 def REQUEST_TIME_BY_SECONDS = 10
 def VOICE_NOTICE_REPEAT_TIMES = 3
@@ -50,7 +50,7 @@ while (true){
     };
   }
   if(!decideToBuyLotterys.isEmpty()){
-//    ("say " + Collections.nCopies(VOICE_NOTICE_REPEAT_TIMES, "${pastLotterys.join(',')} 已出现数据").join(",重复,") ).execute()
+    ("say " + Collections.nCopies(VOICE_NOTICE_REPEAT_TIMES, "${pastLotterys.join(',')} 已出现数据").join(",重复,") ).execute()
     decideToBuyLotterys.clear()
   }
   Thread.sleep(((60 + REQUEST_TIME_BY_SECONDS) - (((long)(System.currentTimeMillis()/1000)) % 60)) * 1000)
