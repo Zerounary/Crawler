@@ -18,7 +18,7 @@ class K3 {
     private betAmt = 0;
     public K3(){}
     public K3(wacthPoint){
-        this.WATCH_POINT = wacthPoint
+        this.WATCH_POINT = wacthPoint + 1
     }
     K3Result  nextStep(lastOpenResult){
         K3Result k3Result = new K3Result()
